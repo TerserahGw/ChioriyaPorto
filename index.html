@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chioriya Developer | Professional Portfolio</title>
+    <title>Chioriya Developer | Portfolio</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <style>
@@ -54,6 +54,199 @@
             line-height: 1.6;
             overflow-x: hidden;
             transition: var(--transition);
+        }
+
+        .welcome-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: all 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+            overflow: hidden;
+        }
+
+        .welcome-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(1.1);
+        }
+
+        .welcome-content {
+            text-align: center;
+            color: white;
+            max-width: 500px;
+            padding: 0 20px;
+            z-index: 10;
+            position: relative;
+        }
+
+        .welcome-logo {
+            font-size: 5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation: logoPulse 2s infinite alternate;
+        }
+
+        @keyframes logoPulse {
+            0% {
+                transform: scale(1);
+                text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            }
+            100% {
+                transform: scale(1.05);
+                text-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            }
+        }
+
+        .progress-container {
+            width: 100%;
+            max-width: 300px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            height: 8px;
+            margin: 20px auto;
+            overflow: hidden;
+            position: relative;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: white;
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .progress-text {
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            min-height: 1.5em;
+        }
+
+        .loading-detail {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+            min-height: 1.2em;
+        }
+
+        .welcome-btn {
+            padding: 12px 30px;
+            border-radius: 50px;
+            border: 2px solid white;
+            background: transparent;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .welcome-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .liquid-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .liquid-shape {
+            position: absolute;
+            border-radius: 40%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 15s infinite linear;
+            opacity: 0.7;
+        }
+
+        .liquid-shape:nth-child(1) {
+            width: 200px;
+            height: 200px;
+            top: 10%;
+            left: 10%;
+            animation-duration: 20s;
+            animation-delay: 0s;
+        }
+
+        .liquid-shape:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            top: 60%;
+            left: 80%;
+            animation-duration: 25s;
+            animation-delay: 2s;
+        }
+
+        .liquid-shape:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            top: 80%;
+            left: 20%;
+            animation-duration: 18s;
+            animation-delay: 1s;
+        }
+
+        .liquid-shape:nth-child(4) {
+            width: 120px;
+            height: 120px;
+            top: 30%;
+            left: 70%;
+            animation-duration: 22s;
+            animation-delay: 3s;
+        }
+
+        .liquid-shape:nth-child(5) {
+            width: 180px;
+            height: 180px;
+            top: 70%;
+            left: 40%;
+            animation-duration: 30s;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+                border-radius: 40%;
+            }
+            25% {
+                transform: translate(50px, 50px) rotate(90deg);
+                border-radius: 50%;
+            }
+            50% {
+                transform: translate(100px, -50px) rotate(180deg);
+                border-radius: 60%;
+            }
+            75% {
+                transform: translate(-50px, 50px) rotate(270deg);
+                border-radius: 50%;
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+                border-radius: 40%;
+            }
         }
 
         .container {
@@ -423,23 +616,37 @@
             overflow: hidden;
         }
 
+        .marquee-container {
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 10s linear infinite;
+            padding-left: 100%;
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
         .music-title {
             font-weight: 600;
             font-size: 1rem;
             color: var(--text);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            transition: var(--transition);
         }
 
         .music-artist {
             font-size: 0.85rem;
             color: var(--text-light);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            transition: var(--transition);
         }
 
         .music-controls {
@@ -552,7 +759,7 @@
             z-index: -1;
         }
 
-        .liquid-shape {
+        .hero-liquid-shape {
             position: absolute;
             bottom: 0;
             left: 0;
@@ -1321,6 +1528,28 @@
     </style>
 </head>
 <body>
+    <div class="welcome-screen" id="welcome-screen">
+        <div class="liquid-shapes">
+            <div class="liquid-shape"></div>
+            <div class="liquid-shape"></div>
+            <div class="liquid-shape"></div>
+            <div class="liquid-shape"></div>
+            <div class="liquid-shape"></div>
+        </div>
+        <div class="welcome-content">
+            <div class="welcome-logo">Chioriya</div>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            
+            <div class="progress-text" id="progress-text">0%</div>
+            <div class="loading-detail" id="loading-detail">Mempersiapkan...</div>
+            
+            <button class="welcome-btn" id="skip-btn">Skip</button>
+        </div>
+    </div>
+
     <header>
         <div class="container header-container">
             <div class="logo">Chioriya</div>
@@ -1372,8 +1601,16 @@
                             <img src="" alt="Cover Musik" id="music-cover-img">
                         </div>
                         <div class="music-details">
-                            <div class="music-title" id="music-title">Lagu Saya</div>
-                            <div class="music-artist" id="music-artist">Chioriya Developer</div>
+                            <div class="marquee-container">
+                                <div class="marquee-content">
+                                    <div class="music-title" id="music-title">Lagu Saya</div>
+                                </div>
+                            </div>
+                            <div class="marquee-container">
+                                <div class="marquee-content">
+                                    <div class="music-artist" id="music-artist">Chioriya Developer</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="music-controls">
@@ -1400,7 +1637,7 @@
 
     <section class="hero">
         <div class="hero-bg"></div>
-        <div class="liquid-shape"></div>
+        <div class="hero-liquid-shape"></div>
         <div class="container">
             <div class="profile-img">
                 <img src="" alt="Profile Picture" id="profile-picture">
@@ -1520,7 +1757,7 @@
 
     <footer>
         <div class="container">
-            <p id="footer-text">&copy; 2023 Chioriya Developer. Semua hak dilindungi.</p>
+            <p id="footer-text">&copy; 2025 Chioriya Developer. Semua hak dilindungi.</p>
         </div>
     </footer>
 
@@ -1557,25 +1794,25 @@
             profilePicture: 'https://files.catbox.moe/bwq7hy.jpg',
             musicList: [
                 {
-                    title: 'Emberfire',
+                    title: 'Emberfire - HOYO-MiX, 希林娜依高',
                     artist: 'HOYO-MiX, 希林娜依高',
                     coverUrl: 'https://files.catbox.moe/63hdh0.png',
                     audioUrl: 'https://files.catbox.moe/4dae0p.mp3'
                 },
                 {
-                    title: 'The Road Not Taken',
+                    title: 'The Road Not Taken - HOYO-MiX, Aimer',
                     artist: 'HOYO-MiX, Aimer',
                     coverUrl: 'https://files.catbox.moe/tpjrev.png',
                     audioUrl: 'https://files.catbox.moe/ags8go.mp3'
                 },
                 {
-                    title: 'Star Odyssey',
+                    title: 'Star Odyssey - HOYO-Mix, 鈴木愛理',
                     artist: 'HOYO-Mix, 鈴木愛理',
                     coverUrl: 'https://files.catbox.moe/5mb46q.png',
                     audioUrl: 'https://files.catbox.moe/xju3ka.mp3'
                 },
                 {
-                    title: 'Columbina Lullaby',
+                    title: 'Columbina Lullaby - Hoyo Mix',
                     artist: 'Hoyo Mix',
                     coverUrl: 'https://files.catbox.moe/vd0k0p.png',
                     audioUrl: 'https://files.catbox.moe/vs8bpd.mp3'
@@ -1664,7 +1901,7 @@
                 project3Desc: "API yang powerful dan mudah diintegrasikan untuk berbagai kebutuhan pengembangan aplikasi dan sistem.",
                 contactTitle: "Hubungi Saya",
                 ctaButton: "Hubungi Saya",
-                footerText: "&copy; 2023 Chioriya Developer. Semua hak dilindungi.",
+                footerText: "&copy; 2025 Chioriya Developer. Semua hak dilindungi.",
                 copiedText: "Teks berhasil disalin!",
                 closeText: "Tutup"
             },
@@ -1691,12 +1928,17 @@
                 project3Desc: "Powerful and easy-to-integrate API for various application and system development needs.",
                 contactTitle: "Contact Me",
                 ctaButton: "Contact Me",
-                footerText: "&copy; 2023 Chioriya Developer. All rights reserved.",
+                footerText: "&copy; 2025 Chioriya Developer. All rights reserved.",
                 copiedText: "Text copied successfully!",
                 closeText: "Close"
             }
         };
 
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        const loadingDetail = document.getElementById('loading-detail');
+        const skipBtn = document.getElementById('skip-btn');
         const themeToggle = document.getElementById('theme-toggle');
         const themeIcon = document.getElementById('theme-icon');
         const themeHighlight = document.querySelector('.theme-highlight');
@@ -1738,8 +1980,88 @@
         let isLanguageToggleActive = false;
         let isMusicPlaying = false;
         let currentMusicIndex = 0;
-        let audio = new Audio();
+        let audioElements = [];
         let currentContactType = '';
+        let resourcesLoaded = false;
+        let loadingProgress = 0;
+        let totalResources = 0;
+        let loadedResources = 0;
+        let loadingInterval;
+        let skipPressed = false;
+
+        function initializeWelcomeScreen() {
+            totalResources = mediaConfig.musicList.length + 1;
+            
+            loadingInterval = setInterval(() => {
+                if (!resourcesLoaded) {
+                    loadingProgress = Math.min(loadingProgress + 1, 90);
+                    updateProgressBar();
+                }
+            }, 100);
+            
+            loadResources();
+        }
+        
+        function loadResources() {
+            const profileImage = new Image();
+            profileImage.onload = () => resourceLoaded("Foto Profil");
+            profileImage.onerror = () => resourceLoaded("Foto Profil");
+            profileImage.src = mediaConfig.profilePicture;
+            
+            mediaConfig.musicList.forEach((music, index) => {
+                const coverImage = new Image();
+                coverImage.onload = () => resourceLoaded(`Cover Musik ${index + 1}`);
+                coverImage.onerror = () => resourceLoaded(`Cover Musik ${index + 1}`);
+                coverImage.src = music.coverUrl;
+                
+                const audio = new Audio();
+                audio.preload = 'auto';
+                audio.addEventListener('canplaythrough', () => resourceLoaded(`Musik ${index + 1}: ${music.title}`), false);
+                audio.addEventListener('error', () => resourceLoaded(`Musik ${index + 1}: ${music.title}`), false);
+                audio.src = music.audioUrl;
+                audioElements.push(audio);
+            });
+        }
+        
+        function resourceLoaded(resourceName) {
+            loadedResources++;
+            
+            if (!skipPressed) {
+                loadingProgress = Math.min(90, Math.floor((loadedResources / totalResources) * 90));
+                updateProgressBar();
+                loadingDetail.textContent = `Loading: ${resourceName}`;
+            }
+            
+            if (loadedResources >= totalResources) {
+                finishLoading();
+            }
+        }
+        
+        function finishLoading() {
+            clearInterval(loadingInterval);
+            resourcesLoaded = true;
+            loadingProgress = 100;
+            updateProgressBar();
+            loadingDetail.textContent = "Selesai!";
+            
+            setTimeout(() => {
+                hideWelcomeScreen();
+            }, 500);
+        }
+        
+        function updateProgressBar() {
+            progressBar.style.width = `${loadingProgress}%`;
+            progressText.textContent = `${loadingProgress}%`;
+        }
+        
+        function hideWelcomeScreen() {
+            welcomeScreen.classList.add('hidden');
+            
+            setTimeout(() => {
+                welcomeScreen.style.display = 'none';
+                playRandomMusic();
+            }, 800);
+        }
         
         function setInitialTheme() {
             if (isDarkTheme) {
@@ -1825,17 +2147,14 @@
         
         function toggleMusicPlayback() {
             if (isMusicPlaying) {
-                audio.pause();
+                audioElements[currentMusicIndex].pause();
                 isMusicPlaying = false;
                 playPauseIcon.className = 'fas fa-play';
                 musicBtn.classList.remove('active');
                 musicBtn.classList.add('muted');
                 animateIconTransition();
             } else {
-                if (!audio.src || audio.src !== mediaConfig.musicList[currentMusicIndex].audioUrl) {
-                    audio.src = mediaConfig.musicList[currentMusicIndex].audioUrl;
-                }
-                audio.play();
+                audioElements[currentMusicIndex].play();
                 isMusicPlaying = true;
                 playPauseIcon.className = 'fas fa-pause';
                 musicBtn.classList.add('active');
@@ -1849,6 +2168,10 @@
             musicCover.classList.add('changing');
             
             setTimeout(() => {
+                if (isMusicPlaying) {
+                    audioElements[currentMusicIndex].pause();
+                }
+                
                 if (direction === 'next') {
                     currentMusicIndex = (currentMusicIndex + 1) % mediaConfig.musicList.length;
                 } else {
@@ -1861,8 +2184,7 @@
                 musicCoverImg.src = currentMusic.coverUrl;
                 
                 if (isMusicPlaying) {
-                    audio.src = currentMusic.audioUrl;
-                    audio.play();
+                    audioElements[currentMusicIndex].play();
                 }
                 
                 setTimeout(() => {
@@ -1878,8 +2200,8 @@
             musicTitle.textContent = currentMusic.title;
             musicArtist.textContent = currentMusic.artist;
             musicCoverImg.src = currentMusic.coverUrl;
-            audio.src = currentMusic.audioUrl;
-            audio.play();
+            
+            audioElements[currentMusicIndex].play();
             isMusicPlaying = true;
             playPauseIcon.className = 'fas fa-pause';
             musicBtn.classList.add('active');
@@ -2067,6 +2389,11 @@
             }
         }
         
+        skipBtn.addEventListener('click', () => {
+            skipPressed = true;
+            hideWelcomeScreen();
+        });
+        
         themeToggle.addEventListener('click', toggleTheme);
         languageToggle.addEventListener('click', toggleLanguage);
         musicBtn.addEventListener('click', toggleMusicPlayer);
@@ -2110,8 +2437,10 @@
             }
         });
         
-        audio.addEventListener('ended', () => {
-            changeMusic('next');
+        audioElements.forEach(audio => {
+            audio.addEventListener('ended', () => {
+                changeMusic('next');
+            });
         });
         
         setInitialTheme();
@@ -2135,9 +2464,7 @@
         musicArtist.textContent = currentMusic.artist;
         musicCoverImg.src = currentMusic.coverUrl;
         
-        setTimeout(() => {
-            playRandomMusic();
-        }, 1000);
+        initializeWelcomeScreen();
         
         const observerOptions = {
             threshold: 0.1,
