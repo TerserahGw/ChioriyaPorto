@@ -2153,6 +2153,7 @@
                 musicBtn.classList.remove('active');
                 musicBtn.classList.add('muted');
                 animateIconTransition();
+                updateMediaSessionState('paused');
             } else {
                 audioElements[currentMusicIndex].play();
                 isMusicPlaying = true;
@@ -2160,6 +2161,7 @@
                 musicBtn.classList.add('active');
                 musicBtn.classList.remove('muted');
                 animateIconTransition();
+                updateMediaSessionState('playing');
             }
         }
         
@@ -2185,7 +2187,10 @@
                 
                 if (isMusicPlaying) {
                     audioElements[currentMusicIndex].play();
+                    updateMediaSessionState('playing');
                 }
+                
+                updateMediaSessionMetadata();
                 
                 setTimeout(() => {
                     musicBtn.classList.remove('changing');
@@ -2207,6 +2212,58 @@
             musicBtn.classList.add('active');
             musicBtn.classList.remove('muted');
             animateIconTransition();
+            
+            updateMediaSessionMetadata();
+            updateMediaSessionState('playing');
+        }
+        
+        function updateMediaSessionMetadata() {
+            if ('mediaSession' in navigator) {
+                const currentMusic = mediaConfig.musicList[currentMusicIndex];
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: currentMusic.title,
+                    artist: currentMusic.artist,
+                    album: 'Chioriya Music',
+                    artwork: [
+                        { src: currentMusic.coverUrl, sizes: '96x96', type: 'image/png' },
+                        { src: currentMusic.coverUrl, sizes: '128x128', type: 'image/png' },
+                        { src: currentMusic.coverUrl, sizes: '192x192', type: 'image/png' },
+                        { src: currentMusic.coverUrl, sizes: '256x256', type: 'image/png' },
+                        { src: currentMusic.coverUrl, sizes: '384x384', type: 'image/png' },
+                        { src: currentMusic.coverUrl, sizes: '512x512', type: 'image/png' }
+                    ]
+                });
+            }
+        }
+        
+        function updateMediaSessionState(state) {
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.playbackState = state;
+            }
+        }
+        
+        function setupMediaSession() {
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.setActionHandler('play', function() {
+                    if (!isMusicPlaying) {
+                        toggleMusicPlayback();
+                    }
+                });
+                
+                navigator.mediaSession.setActionHandler('pause', function() {
+                    if (isMusicPlaying) {
+                        toggleMusicPlayback();
+                    }
+                });
+                
+                navigator.mediaSession.setActionHandler('previoustrack', function() {
+                    changeMusic('prev');
+                });
+                
+                navigator.mediaSession.setActionHandler('nexttrack', function() {
+                    changeMusic('next');
+                });
+            }
         }
         
         function updateContent() {
@@ -2464,6 +2521,7 @@
         musicArtist.textContent = currentMusic.artist;
         musicCoverImg.src = currentMusic.coverUrl;
         
+        setupMediaSession();
         initializeWelcomeScreen();
         
         const observerOptions = {
@@ -2499,4 +2557,4 @@
         });
     </script>
 </body>
-</html>
+    </html>
