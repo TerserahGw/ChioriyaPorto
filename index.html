@@ -70,6 +70,7 @@
             z-index: 9999;
             transition: all 0.8s cubic-bezier(0.77, 0, 0.175, 1);
             overflow: hidden;
+            cursor: pointer;
         }
 
         .welcome-screen.hidden {
@@ -163,6 +164,22 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
+        .click-instruction {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            margin-top: 20px;
+            animation: fadeInOut 2s infinite;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% {
+                opacity: 0.7;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
         .liquid-shapes {
             position: absolute;
             top: 0;
@@ -177,7 +194,7 @@
             position: absolute;
             border-radius: 40%;
             background: rgba(255, 255, 255, 0.1);
-            animation: float 15s infinite linear;
+            animation: float 8s infinite linear;
             opacity: 0.7;
         }
 
@@ -186,7 +203,7 @@
             height: 200px;
             top: 10%;
             left: 10%;
-            animation-duration: 20s;
+            animation-duration: 10s;
             animation-delay: 0s;
         }
 
@@ -195,8 +212,8 @@
             height: 150px;
             top: 60%;
             left: 80%;
-            animation-duration: 25s;
-            animation-delay: 2s;
+            animation-duration: 12s;
+            animation-delay: 1s;
         }
 
         .liquid-shape:nth-child(3) {
@@ -204,8 +221,8 @@
             height: 100px;
             top: 80%;
             left: 20%;
-            animation-duration: 18s;
-            animation-delay: 1s;
+            animation-duration: 9s;
+            animation-delay: 0.5s;
         }
 
         .liquid-shape:nth-child(4) {
@@ -213,8 +230,8 @@
             height: 120px;
             top: 30%;
             left: 70%;
-            animation-duration: 22s;
-            animation-delay: 3s;
+            animation-duration: 11s;
+            animation-delay: 1.5s;
         }
 
         .liquid-shape:nth-child(5) {
@@ -222,8 +239,8 @@
             height: 180px;
             top: 70%;
             left: 40%;
-            animation-duration: 30s;
-            animation-delay: 4s;
+            animation-duration: 15s;
+            animation-delay: 2s;
         }
 
         @keyframes float {
@@ -779,7 +796,7 @@
             overflow: hidden;
             position: relative;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-            animation: float 6s ease-in-out infinite;
+            animation: floatProfile 6s ease-in-out infinite;
             background: var(--gradient);
             display: flex;
             align-items: center;
@@ -792,6 +809,15 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+
+        @keyframes floatProfile {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
         }
 
         h1 {
@@ -1209,15 +1235,6 @@
             margin-top: 80px;
         }
 
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-15px);
-            }
-        }
-
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -1547,6 +1564,7 @@
             <div class="loading-detail" id="loading-detail">Mempersiapkan...</div>
             
             <button class="welcome-btn" id="skip-btn">Skip</button>
+            <div class="click-instruction" id="click-instruction" style="display: none;">Klik di mana saja untuk melanjutkan</div>
         </div>
     </div>
 
@@ -1939,6 +1957,7 @@
         const progressText = document.getElementById('progress-text');
         const loadingDetail = document.getElementById('loading-detail');
         const skipBtn = document.getElementById('skip-btn');
+        const clickInstruction = document.getElementById('click-instruction');
         const themeToggle = document.getElementById('theme-toggle');
         const themeIcon = document.getElementById('theme-icon');
         const themeHighlight = document.querySelector('.theme-highlight');
@@ -1980,7 +1999,7 @@
         let isLanguageToggleActive = false;
         let isMusicPlaying = false;
         let currentMusicIndex = 0;
-        let audioElements = [];
+        let audioElement = null;
         let currentContactType = '';
         let resourcesLoaded = false;
         let loadingProgress = 0;
@@ -1988,24 +2007,41 @@
         let loadedResources = 0;
         let loadingInterval;
         let skipPressed = false;
+        let maxLoadingTimeout;
+        let canProceed = false;
 
         function initializeWelcomeScreen() {
-            totalResources = mediaConfig.musicList.length + 1;
+            loadingProgress = 0;
+            loadedResources = 0;
+            totalResources = mediaConfig.musicList.length + 2;
             
             loadingInterval = setInterval(() => {
-                if (!resourcesLoaded) {
-                    loadingProgress = Math.min(loadingProgress + 1, 90);
+                if (!resourcesLoaded && loadingProgress < 90) {
+                    loadingProgress += 5;
                     updateProgressBar();
+                    loadingDetail.textContent = "Memuat aplikasi...";
                 }
-            }, 100);
+            }, 150);
+            
+            maxLoadingTimeout = setTimeout(() => {
+                if (!resourcesLoaded) {
+                    finishLoading();
+                }
+            }, 5000);
             
             loadResources();
         }
         
         function loadResources() {
             const profileImage = new Image();
-            profileImage.onload = () => resourceLoaded("Foto Profil");
-            profileImage.onerror = () => resourceLoaded("Foto Profil");
+            profileImage.onload = () => {
+                profilePicture.src = mediaConfig.profilePicture;
+                resourceLoaded("Foto Profil");
+            };
+            profileImage.onerror = () => {
+                profilePicture.src = '';
+                resourceLoaded("Foto Profil");
+            };
             profileImage.src = mediaConfig.profilePicture;
             
             mediaConfig.musicList.forEach((music, index) => {
@@ -2013,24 +2049,46 @@
                 coverImage.onload = () => resourceLoaded(`Cover Musik ${index + 1}`);
                 coverImage.onerror = () => resourceLoaded(`Cover Musik ${index + 1}`);
                 coverImage.src = music.coverUrl;
-                
-                const audio = new Audio();
-                audio.preload = 'auto';
-                audio.addEventListener('canplaythrough', () => resourceLoaded(`Musik ${index + 1}: ${music.title}`), false);
-                audio.addEventListener('error', () => resourceLoaded(`Musik ${index + 1}: ${music.title}`), false);
-                audio.src = music.audioUrl;
-                audioElements.push(audio);
             });
+            
+            audioElement = new Audio();
+            audioElement.preload = 'auto';
+            
+            audioElement.addEventListener('ended', handleTrackEnd);
+            
+            const currentMusic = mediaConfig.musicList[0];
+            musicTitle.textContent = currentMusic.title;
+            musicArtist.textContent = currentMusic.artist;
+            musicCoverImg.src = currentMusic.coverUrl;
+            
+            const audioLoaded = () => resourceLoaded("Musik siap");
+            audioElement.addEventListener('canplaythrough', audioLoaded, {once: true});
+            audioElement.addEventListener('error', audioLoaded, {once: true});
+            audioElement.src = currentMusic.audioUrl;
+            
+            setTimeout(() => {
+                if (loadedResources < totalResources) {
+                    finishLoading();
+                }
+            }, 3000);
+        }
+        
+        function handleTrackEnd() {
+            console.log('Track ended, moving to next track');
+            changeMusic('next');
         }
         
         function resourceLoaded(resourceName) {
+            if (skipPressed) return;
+            
             loadedResources++;
             
-            if (!skipPressed) {
-                loadingProgress = Math.min(90, Math.floor((loadedResources / totalResources) * 90));
-                updateProgressBar();
-                loadingDetail.textContent = `Loading: ${resourceName}`;
+            const calculatedProgress = Math.min(90, Math.floor((loadedResources / totalResources) * 90));
+            if (calculatedProgress > loadingProgress) {
+                loadingProgress = calculatedProgress;
             }
+            updateProgressBar();
+            loadingDetail.textContent = `Memuat: ${resourceName}`;
             
             if (loadedResources >= totalResources) {
                 finishLoading();
@@ -2039,14 +2097,15 @@
         
         function finishLoading() {
             clearInterval(loadingInterval);
+            clearTimeout(maxLoadingTimeout);
             resourcesLoaded = true;
             loadingProgress = 100;
             updateProgressBar();
             loadingDetail.textContent = "Selesai!";
             
-            setTimeout(() => {
-                hideWelcomeScreen();
-            }, 500);
+            skipBtn.style.display = 'none';
+            clickInstruction.style.display = 'block';
+            canProceed = true;
         }
         
         function updateProgressBar() {
@@ -2055,11 +2114,15 @@
         }
         
         function hideWelcomeScreen() {
+            if (!canProceed) return;
+            
             welcomeScreen.classList.add('hidden');
             
             setTimeout(() => {
                 welcomeScreen.style.display = 'none';
-                playRandomMusic();
+                setTimeout(() => {
+                    playRandomMusic();
+                }, 100);
             }, 800);
         }
         
@@ -2147,7 +2210,7 @@
         
         function toggleMusicPlayback() {
             if (isMusicPlaying) {
-                audioElements[currentMusicIndex].pause();
+                audioElement.pause();
                 isMusicPlaying = false;
                 playPauseIcon.className = 'fas fa-play';
                 musicBtn.classList.remove('active');
@@ -2155,13 +2218,19 @@
                 animateIconTransition();
                 updateMediaSessionState('paused');
             } else {
-                audioElements[currentMusicIndex].play();
-                isMusicPlaying = true;
-                playPauseIcon.className = 'fas fa-pause';
-                musicBtn.classList.add('active');
-                musicBtn.classList.remove('muted');
-                animateIconTransition();
-                updateMediaSessionState('playing');
+                const playPromise = audioElement.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        isMusicPlaying = true;
+                        playPauseIcon.className = 'fas fa-pause';
+                        musicBtn.classList.add('active');
+                        musicBtn.classList.remove('muted');
+                        animateIconTransition();
+                        updateMediaSessionState('playing');
+                    }).catch(error => {
+                        console.log('Autoplay failed:', error);
+                    });
+                }
             }
         }
         
@@ -2171,7 +2240,7 @@
             
             setTimeout(() => {
                 if (isMusicPlaying) {
-                    audioElements[currentMusicIndex].pause();
+                    audioElement.pause();
                 }
                 
                 if (direction === 'next') {
@@ -2185,9 +2254,19 @@
                 musicArtist.textContent = currentMusic.artist;
                 musicCoverImg.src = currentMusic.coverUrl;
                 
+                audioElement.src = currentMusic.audioUrl;
+                
+                audioElement.addEventListener('ended', handleTrackEnd);
+                
                 if (isMusicPlaying) {
-                    audioElements[currentMusicIndex].play();
-                    updateMediaSessionState('playing');
+                    const playPromise = audioElement.play();
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
+                            updateMediaSessionState('playing');
+                        }).catch(error => {
+                            console.log('Autoplay failed:', error);
+                        });
+                    }
                 }
                 
                 updateMediaSessionMetadata();
@@ -2200,21 +2279,38 @@
         }
         
         function playRandomMusic() {
+            if (!audioElement) return;
+            
             currentMusicIndex = Math.floor(Math.random() * mediaConfig.musicList.length);
             const currentMusic = mediaConfig.musicList[currentMusicIndex];
             musicTitle.textContent = currentMusic.title;
             musicArtist.textContent = currentMusic.artist;
             musicCoverImg.src = currentMusic.coverUrl;
             
-            audioElements[currentMusicIndex].play();
-            isMusicPlaying = true;
-            playPauseIcon.className = 'fas fa-pause';
-            musicBtn.classList.add('active');
-            musicBtn.classList.remove('muted');
-            animateIconTransition();
+            audioElement.src = currentMusic.audioUrl;
+            
+            audioElement.addEventListener('ended', handleTrackEnd);
             
             updateMediaSessionMetadata();
-            updateMediaSessionState('playing');
+            
+            const playPromise = audioElement.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    isMusicPlaying = true;
+                    playPauseIcon.className = 'fas fa-pause';
+                    musicBtn.classList.add('active');
+                    musicBtn.classList.remove('muted');
+                    animateIconTransition();
+                    
+                    updateMediaSessionState('playing');
+                }).catch(error => {
+                    console.log('Autoplay failed:', error);
+                    isMusicPlaying = false;
+                    playPauseIcon.className = 'fas fa-play';
+                    musicBtn.classList.remove('active');
+                    musicBtn.classList.add('muted');
+                });
+            }
         }
         
         function updateMediaSessionMetadata() {
@@ -2233,17 +2329,7 @@
                         { src: currentMusic.coverUrl, sizes: '512x512', type: 'image/png' }
                     ]
                 });
-            }
-        }
-        
-        function updateMediaSessionState(state) {
-            if ('mediaSession' in navigator) {
-                navigator.mediaSession.playbackState = state;
-            }
-        }
-        
-        function setupMediaSession() {
-            if ('mediaSession' in navigator) {
+                
                 navigator.mediaSession.setActionHandler('play', function() {
                     if (!isMusicPlaying) {
                         toggleMusicPlayback();
@@ -2263,6 +2349,12 @@
                 navigator.mediaSession.setActionHandler('nexttrack', function() {
                     changeMusic('next');
                 });
+            }
+        }
+        
+        function updateMediaSessionState(state) {
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.playbackState = state;
             }
         }
         
@@ -2294,6 +2386,12 @@
             document.getElementById('footer-text').innerHTML = langData.footerText;
             document.getElementById('notification-text').textContent = langData.copiedText;
             document.getElementById('modal-close').textContent = langData.closeText;
+            
+            if (currentLanguage === 'id') {
+                clickInstruction.textContent = "Klik di mana saja untuk melanjutkan";
+            } else {
+                clickInstruction.textContent = "Click anywhere to continue";
+            }
             
             if (currentContactType) {
                 updateModalContent(currentContactType);
@@ -2448,7 +2546,15 @@
         
         skipBtn.addEventListener('click', () => {
             skipPressed = true;
+            clearInterval(loadingInterval);
+            clearTimeout(maxLoadingTimeout);
             hideWelcomeScreen();
+        });
+        
+        welcomeScreen.addEventListener('click', () => {
+            if (canProceed) {
+                hideWelcomeScreen();
+            }
         });
         
         themeToggle.addEventListener('click', toggleTheme);
@@ -2494,11 +2600,9 @@
             }
         });
         
-        audioElements.forEach(audio => {
-            audio.addEventListener('ended', () => {
-                changeMusic('next');
-            });
-        });
+        if (audioElement) {
+            audioElement.addEventListener('ended', handleTrackEnd);
+        }
         
         setInitialTheme();
         updateContent();
@@ -2514,14 +2618,28 @@
         
         musicBtn.classList.add('muted');
         
-        profilePicture.src = mediaConfig.profilePicture;
+        if ('mediaSession' in navigator) {
+            navigator.mediaSession.setActionHandler('play', function() {
+                if (!isMusicPlaying) {
+                    toggleMusicPlayback();
+                }
+            });
+            
+            navigator.mediaSession.setActionHandler('pause', function() {
+                if (isMusicPlaying) {
+                    toggleMusicPlayback();
+                }
+            });
+            
+            navigator.mediaSession.setActionHandler('previoustrack', function() {
+                changeMusic('prev');
+            });
+            
+            navigator.mediaSession.setActionHandler('nexttrack', function() {
+                changeMusic('next');
+            });
+        }
         
-        const currentMusic = mediaConfig.musicList[currentMusicIndex];
-        musicTitle.textContent = currentMusic.title;
-        musicArtist.textContent = currentMusic.artist;
-        musicCoverImg.src = currentMusic.coverUrl;
-        
-        setupMediaSession();
         initializeWelcomeScreen();
         
         const observerOptions = {
@@ -2557,4 +2675,4 @@
         });
     </script>
 </body>
-    </html>
+                            </html>
