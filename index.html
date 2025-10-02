@@ -37,6 +37,15 @@
             --glass-border: rgba(255, 255, 255, 0.1);
         }
 
+        .amoled-dark {
+            --bg: #000000;
+            --card-bg: #111111;
+            --text: #E0E0E0;
+            --text-light: #A0A0A0;
+            --glass-bg: rgba(17, 17, 17, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.05);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -1229,38 +1238,6 @@
             background: var(--card-bg);
         }
 
-        .notification {
-            position: fixed;
-            top: 100px;
-            left: 50%;
-            transform: translateX(-50%) scale(0);
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 25px;
-            padding: 10px 20px;
-            color: var(--text);
-            box-shadow: 0 15px 35px var(--shadow);
-            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            z-index: 3000;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            max-width: 280px;
-            text-align: center;
-            transform-origin: center;
-        }
-
-        .notification.active {
-            transform: translateX(-50%) scale(1);
-        }
-
-        .notification i {
-            color: var(--accent);
-            font-size: 1.2rem;
-        }
-
         .toast-container {
             position: fixed;
             top: 100px;
@@ -1573,7 +1550,7 @@
             transform: scale(1.1);
         }
 
-        .game-popup {
+        .settings-popup {
             position: fixed;
             top: 0;
             left: 0;
@@ -1589,32 +1566,32 @@
             transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
-        .game-popup.active {
+        .settings-popup.active {
             opacity: 1;
             visibility: visible;
         }
 
-        .game-popup-container {
+        .settings-popup-container {
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
             width: 90%;
-            max-width: 600px;
+            max-width: 900px;
             max-height: 80vh;
             box-shadow: 0 20px 50px var(--shadow);
             transform: scale(0.9) translateY(20px);
             transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            padding: 30px;
-            position: relative;
+            display: flex;
+            overflow: hidden;
         }
 
-        .game-popup.active .game-popup-container {
+        .settings-popup.active .settings-popup-container {
             transform: scale(1) translateY(0);
         }
 
-        .game-popup-close {
+        .settings-popup-close {
             position: absolute;
             top: 15px;
             right: 15px;
@@ -1632,17 +1609,124 @@
             z-index: 10;
         }
 
-        .game-popup-close:hover {
+        .settings-popup-close:hover {
             background: var(--primary);
             color: white;
             transform: scale(1.1);
         }
 
-        .game-popup-title {
+        .settings-popup-title {
             font-size: 1.8rem;
             margin-bottom: 25px;
             color: var(--text);
             text-align: center;
+        }
+
+        .settings-columns {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        .settings-left {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            max-height: calc(80vh - 60px);
+        }
+
+        .settings-right {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            border-left: 1px solid var(--glass-border);
+            max-height: calc(80vh - 60px);
+        }
+
+        .settings-section {
+            margin-bottom: 30px;
+        }
+
+        .settings-section-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 5px;
+        }
+
+        .settings-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .settings-item {
+            background: var(--glass-bg);
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .settings-item-info {
+            flex: 1;
+        }
+
+        .settings-item-title {
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 5px;
+        }
+
+        .settings-item-desc {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-checkbox {
+            display: none;
+        }
+
+        .toggle-label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50px;
+            height: 24px;
+            background-color: var(--text-light);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .toggle-label::after {
+            content: "";
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: white;
+            transition: transform 0.3s;
+        }
+
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: var(--accent);
+        }
+
+        .toggle-checkbox:checked + .toggle-label::after {
+            transform: translateX(26px);
         }
 
         .game-list {
@@ -1797,8 +1881,25 @@
                 height: 150px;
             }
 
-            .game-popup-container {
+            .settings-popup-container {
+                flex-direction: column;
+                max-height: 85vh;
+            }
+
+            .settings-columns {
+                flex-direction: column;
+            }
+
+            .settings-left, .settings-right {
                 padding: 20px;
+                overflow-y: auto;
+                max-height: 40vh;
+                flex: 1;
+            }
+
+            .settings-right {
+                border-left: none;
+                border-top: 1px solid var(--glass-border);
             }
 
             .game-list {
@@ -2376,36 +2477,82 @@
         </div>
     </div>
 
-    <div class="game-popup" id="game-popup">
-        <div class="game-popup-container">
-            <div class="game-popup-close" id="game-popup-close">
+    <div class="settings-popup" id="settings-popup">
+        <div class="settings-popup-container">
+            <div class="settings-popup-close" id="settings-popup-close">
                 <i class="fas fa-times"></i>
             </div>
-            <h3 class="game-popup-title" id="game-popup-title">Mini Games</h3>
-            <div class="game-list" id="game-list">
-                <div class="game-item">
-                    <div class="game-icon">
-                        <i class="fas fa-gamepad"></i>
+            <div class="settings-columns">
+                <div class="settings-left">
+                    <h3 class="settings-popup-title" id="settings-popup-title">Pengaturan</h3>
+                    
+                    <div class="settings-section">
+                        <h4 class="settings-section-title" id="settings-section-title">Pengaturan Umum</h4>
+                        <div class="settings-list">
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title" id="toast-notif-title">Toast Notifikasi</div>
+                                    <div class="settings-item-desc" id="toast-notif-desc">Tampilkan notifikasi toast</div>
+                                </div>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="toast-toggle" class="toggle-checkbox" checked>
+                                    <label for="toast-toggle" class="toggle-label"></label>
+                                </div>
+                            </div>
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title" id="amoled-title">Amoled Dark Mode</div>
+                                    <div class="settings-item-desc" id="amoled-desc">Mode gelap untuk layar AMOLED</div>
+                                </div>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="amoled-toggle" class="toggle-checkbox">
+                                    <label for="amoled-toggle" class="toggle-label"></label>
+                                </div>
+                            </div>
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title" id="auto-switch-title">Auto Switch Song</div>
+                                    <div class="settings-item-desc" id="auto-switch-desc">Otomatis ganti lagu saat selesai</div>
+                                </div>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="auto-switch-toggle" class="toggle-checkbox" checked>
+                                    <label for="auto-switch-toggle" class="toggle-label"></label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="game-name" id="game-1">Coming Soon</div>
                 </div>
-                <div class="game-item">
-                    <div class="game-icon">
-                        <i class="fas fa-dice"></i>
+                
+                <div class="settings-right">
+                    <div class="settings-section">
+                        <h4 class="settings-section-title" id="games-section-title">Permainan</h4>
+                        <div class="game-list" id="game-list">
+                            <div class="game-item">
+                                <div class="game-icon">
+                                    <i class="fas fa-gamepad"></i>
+                                </div>
+                                <div class="game-name" id="game-1">Coming Soon</div>
+                            </div>
+                            <div class="game-item">
+                                <div class="game-icon">
+                                    <i class="fas fa-dice"></i>
+                                </div>
+                                <div class="game-name" id="game-2">Coming Soon</div>
+                            </div>
+                            <div class="game-item">
+                                <div class="game-icon">
+                                    <i class="fas fa-puzzle-piece"></i>
+                                </div>
+                                <div class="game-name" id="game-3">Coming Soon</div>
+                            </div>
+                            <div class="game-item">
+                                <div class="game-icon">
+                                    <i class="fas fa-chess"></i>
+                                </div>
+                                <div class="game-name" id="game-4">Coming Soon</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="game-name" id="game-2">Coming Soon</div>
-                </div>
-                <div class="game-item">
-                    <div class="game-icon">
-                        <i class="fas fa-puzzle-piece"></i>
-                    </div>
-                    <div class="game-name" id="game-3">Coming Soon</div>
-                </div>
-                <div class="game-item">
-                    <div class="game-icon">
-                        <i class="fas fa-chess"></i>
-                    </div>
-                    <div class="game-name" id="game-4">Coming Soon</div>
                 </div>
             </div>
         </div>
@@ -2544,7 +2691,15 @@
                 navProjects: "Projects",
                 navContact: "Kontak",
                 musicPlaylist: "Daftar Putar",
-                miniGames: "Mini Games",
+                settingsTitle: "Pengaturan",
+                settingsSectionTitle: "Pengaturan Umum",
+                gamesSectionTitle: "Permainan",
+                toastNotifTitle: "Toast Notifikasi",
+                toastNotifDesc: "Tampilkan notifikasi toast",
+                amoledTitle: "Amoled Dark Mode",
+                amoledDesc: "Mode gelap untuk layar AMOLED",
+                autoSwitchTitle: "Auto Switch Song",
+                autoSwitchDesc: "Otomatis ganti lagu saat selesai",
                 comingSoon: "Coming Soon"
             },
             en: {
@@ -2585,7 +2740,15 @@
                 navProjects: "Projects",
                 navContact: "Contact",
                 musicPlaylist: "Playlist",
-                miniGames: "Mini Games",
+                settingsTitle: "Settings",
+                settingsSectionTitle: "General Settings",
+                gamesSectionTitle: "Games",
+                toastNotifTitle: "Toast Notifications",
+                toastNotifDesc: "Show toast notifications",
+                amoledTitle: "Amoled Dark Mode",
+                amoledDesc: "Dark mode for AMOLED screens",
+                autoSwitchTitle: "Auto Switch Song",
+                autoSwitchDesc: "Automatically switch songs when finished",
                 comingSoon: "Coming Soon"
             }
         };
@@ -2649,9 +2812,20 @@
         const musicPopupNext = document.getElementById('music-popup-next');
         const musicPopupListItems = document.getElementById('music-popup-list-items');
         const logo = document.getElementById('logo');
-        const gamePopup = document.getElementById('game-popup');
-        const gamePopupClose = document.getElementById('game-popup-close');
-        const gamePopupTitle = document.getElementById('game-popup-title');
+        const settingsPopup = document.getElementById('settings-popup');
+        const settingsPopupClose = document.getElementById('settings-popup-close');
+        const settingsPopupTitle = document.getElementById('settings-popup-title');
+        const settingsSectionTitle = document.getElementById('settings-section-title');
+        const gamesSectionTitle = document.getElementById('games-section-title');
+        const toastNotifTitle = document.getElementById('toast-notif-title');
+        const toastNotifDesc = document.getElementById('toast-notif-desc');
+        const amoledTitle = document.getElementById('amoled-title');
+        const amoledDesc = document.getElementById('amoled-desc');
+        const autoSwitchTitle = document.getElementById('auto-switch-title');
+        const autoSwitchDesc = document.getElementById('auto-switch-desc');
+        const toastToggle = document.getElementById('toast-toggle');
+        const amoledToggle = document.getElementById('amoled-toggle');
+        const autoSwitchToggle = document.getElementById('auto-switch-toggle');
         const gameItems = document.querySelectorAll('.game-name');
         
         let currentLanguage = isIndonesian ? 'id' : 'en';
@@ -2675,6 +2849,9 @@
         let isShowingToast = false;
         let isDraggingProgress = false;
         let progressUpdateInterval;
+        let enableToast = true;
+        let enableAmoledDark = false;
+        let enableAutoSwitch = true;
 
         function initializeWelcomeScreen() {
             loadingProgress = 0;
@@ -2745,7 +2922,12 @@
         }
         
         function handleTrackEnd() {
-            changeMusic('next');
+            if (enableAutoSwitch) {
+                changeMusic('next');
+            } else {
+                audioElement.currentTime = 0;
+                audioElement.play();
+            }
         }
         
         function resourceLoaded(resourceName) {
@@ -2802,8 +2984,13 @@
                 themeIcon.className = 'fas fa-moon theme-icon';
                 darkOption.classList.add('active');
                 themeHighlight.style.left = '65px';
+                
+                if (enableAmoledDark) {
+                    document.body.classList.add('amoled-dark');
+                }
             } else {
                 document.body.classList.remove('dark-theme');
+                document.body.classList.remove('amoled-dark');
                 themeIcon.className = 'fas fa-sun theme-icon';
                 lightOption.classList.add('active');
                 themeHighlight.style.left = '5px';
@@ -2824,8 +3011,13 @@
                         lightOption.classList.remove('active');
                         darkOption.classList.add('active');
                         themeHighlight.style.left = '65px';
+                        
+                        if (enableAmoledDark) {
+                            document.body.classList.add('amoled-dark');
+                        }
                     } else {
                         document.body.classList.remove('dark-theme');
+                        document.body.classList.remove('amoled-dark');
                         themeIcon.className = 'fas fa-sun theme-icon';
                         darkOption.classList.remove('active');
                         lightOption.classList.add('active');
@@ -2885,8 +3077,8 @@
             }
         }
         
-        function toggleGamePopup() {
-            gamePopup.classList.toggle('active');
+        function toggleSettingsPopup() {
+            settingsPopup.classList.toggle('active');
         }
         
         function closeMusicPopup(e) {
@@ -2895,9 +3087,9 @@
             }
         }
         
-        function closeGamePopup(e) {
-            if (e.target === gamePopup) {
-                toggleGamePopup();
+        function closeSettingsPopup(e) {
+            if (e.target === settingsPopup) {
+                toggleSettingsPopup();
             }
         }
         
@@ -3212,6 +3404,8 @@
         }
         
         function showToast(message, type = 'default', duration = 3000) {
+            if (!enableToast) return;
+            
             toastQueue.push({ message, type, duration });
             if (!isShowingToast) {
                 processToastQueue();
@@ -3259,6 +3453,7 @@
                 case 'theme': return 'fa-palette';
                 case 'language': return 'fa-language';
                 case 'copy': return 'fa-check-circle';
+                case 'settings': return 'fa-cog';
                 default: return 'fa-bell';
             }
         }
@@ -3317,6 +3512,15 @@
             showToast(message, 'copy', 2000);
         }
         
+        function showSettingsNotification(settingName, isEnabled) {
+            const status = isEnabled ? 
+                (currentLanguage === 'id' ? 'diaktifkan' : 'enabled') : 
+                (currentLanguage === 'id' ? 'dinonaktifkan' : 'disabled');
+            
+            const message = `${settingName} ${status}`;
+            showToast(message, 'settings', 2000);
+        }
+        
         function updateContent() {
             const langData = content[currentLanguage];
             
@@ -3353,7 +3557,15 @@
             document.getElementById('nav-contact').textContent = langData.navContact;
             
             document.getElementById('music-popup-list-title').textContent = langData.musicPlaylist;
-            document.getElementById('game-popup-title').textContent = langData.miniGames;
+            document.getElementById('settings-popup-title').textContent = langData.settingsTitle;
+            document.getElementById('settings-section-title').textContent = langData.settingsSectionTitle;
+            document.getElementById('games-section-title').textContent = langData.gamesSectionTitle;
+            document.getElementById('toast-notif-title').textContent = langData.toastNotifTitle;
+            document.getElementById('toast-notif-desc').textContent = langData.toastNotifDesc;
+            document.getElementById('amoled-title').textContent = langData.amoledTitle;
+            document.getElementById('amoled-desc').textContent = langData.amoledDesc;
+            document.getElementById('auto-switch-title').textContent = langData.autoSwitchTitle;
+            document.getElementById('auto-switch-desc').textContent = langData.autoSwitchDesc;
             
             gameItems.forEach(item => {
                 item.textContent = langData.comingSoon;
@@ -3509,6 +3721,49 @@
             }
         }
         
+        function toggleAmoledMode() {
+            enableAmoledDark = amoledToggle.checked;
+            
+            if (isDarkTheme && enableAmoledDark) {
+                document.body.classList.add('amoled-dark');
+            } else {
+                document.body.classList.remove('amoled-dark');
+            }
+            
+            localStorage.setItem('enableAmoledDark', enableAmoledDark);
+            showSettingsNotification(content[currentLanguage].amoledTitle, enableAmoledDark);
+        }
+        
+        function toggleToastNotifications() {
+            enableToast = toastToggle.checked;
+            localStorage.setItem('enableToast', enableToast);
+            showSettingsNotification(content[currentLanguage].toastNotifTitle, enableToast);
+        }
+        
+        function toggleAutoSwitch() {
+            enableAutoSwitch = autoSwitchToggle.checked;
+            localStorage.setItem('enableAutoSwitch', enableAutoSwitch);
+            showSettingsNotification(content[currentLanguage].autoSwitchTitle, enableAutoSwitch);
+        }
+        
+        function loadSettings() {
+            const savedToast = localStorage.getItem('enableToast');
+            const savedAmoled = localStorage.getItem('enableAmoledDark');
+            const savedAutoSwitch = localStorage.getItem('enableAutoSwitch');
+            
+            if (savedToast !== null) enableToast = savedToast === 'true';
+            if (savedAmoled !== null) enableAmoledDark = savedAmoled === 'true';
+            if (savedAutoSwitch !== null) enableAutoSwitch = savedAutoSwitch === 'true';
+            
+            toastToggle.checked = enableToast;
+            amoledToggle.checked = enableAmoledDark;
+            autoSwitchToggle.checked = enableAutoSwitch;
+            
+            if (isDarkTheme && enableAmoledDark) {
+                document.body.classList.add('amoled-dark');
+            }
+        }
+        
         skipBtn.addEventListener('click', () => {
             skipPressed = true;
             clearInterval(loadingInterval);
@@ -3576,9 +3831,13 @@
         
         progressBarContainer.addEventListener('mousedown', startDrag);
         
-        logo.addEventListener('click', toggleGamePopup);
-        gamePopupClose.addEventListener('click', toggleGamePopup);
-        gamePopup.addEventListener('click', closeGamePopup);
+        logo.addEventListener('click', toggleSettingsPopup);
+        settingsPopupClose.addEventListener('click', toggleSettingsPopup);
+        settingsPopup.addEventListener('click', closeSettingsPopup);
+        
+        toastToggle.addEventListener('change', toggleToastNotifications);
+        amoledToggle.addEventListener('change', toggleAmoledMode);
+        autoSwitchToggle.addEventListener('change', toggleAutoSwitch);
         
         if (audioElement) {
             audioElement.addEventListener('ended', handleTrackEnd);
@@ -3587,6 +3846,7 @@
         }
         
         setInitialTheme();
+        loadSettings();
         updateContent();
         updateNavIndicator();
         updateMusicList();
@@ -3658,4 +3918,4 @@
         });
     </script>
 </body>
-    </html>
+</html>
