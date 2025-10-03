@@ -4182,12 +4182,7 @@ Bona Somnians a luna`
                 copyToClipboard(urlText.textContent);
             });
             
-            logo.addEventListener('click', () => {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            });
+            logo.addEventListener('click', toggleSettingsPopup);
             
             document.getElementById('cta-button').addEventListener('click', (e) => {
                 e.preventDefault();
