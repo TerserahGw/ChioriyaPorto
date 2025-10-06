@@ -1402,6 +1402,25 @@
             background: var(--glass-bg);
             overflow-y: auto;
             max-height: 70vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .music-popup-list-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 0;
+            background: var(--glass-bg);
+            z-index: 10;
+            padding: 10px 0;
+        }
+
+        .music-popup-list-content {
+            flex: 1;
+            overflow-y: auto;
         }
 
         .music-popup-lyrics {
@@ -1575,6 +1594,7 @@
             margin-bottom: 20px;
             color: var(--text);
             text-align: center;
+            margin-top: 10px;
         }
 
         .music-popup-item {
@@ -1884,6 +1904,133 @@
             font-size: 1rem;
         }
 
+        .playlist-view {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .playlist-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .playlist-back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .playlist-back-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .playlist-search {
+            flex: 1;
+            position: relative;
+        }
+
+        .playlist-search input {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 25px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text);
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .playlist-search input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .playlist-search i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+
+        .playlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .playlist-item {
+            background: var(--glass-bg);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .playlist-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px var(--shadow);
+            background: var(--primary);
+            color: white;
+        }
+
+        .playlist-cover {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0 auto 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .playlist-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .playlist-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .playlist-count {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .playlist-item:hover .playlist-count {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .playlist-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .playlist-item.active .playlist-count {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
         @keyframes coverChanging {
             0% {
                 transform: scale(1);
@@ -2061,6 +2208,20 @@
 
             .game-icon {
                 font-size: 2rem;
+            }
+
+            .playlist-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 15px;
+            }
+
+            .playlist-item {
+                padding: 15px;
+            }
+
+            .playlist-cover {
+                width: 80px;
+                height: 80px;
             }
 
             h1 {
@@ -2615,8 +2776,42 @@
                 </div>
             </div>
             <div class="music-popup-list">
-                <h3 class="music-popup-list-title" id="music-popup-list-title">Daftar Putar</h3>
-                <div id="music-popup-list-items"></div>
+                <div class="music-popup-list-header">
+                    <button class="playlist-back-btn" id="playlist-back-btn" style="display: none;">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h3 class="music-popup-list-title" id="music-popup-list-title">Daftar Putar</h3>
+                    <div class="playlist-search" id="playlist-search" style="display: none;">
+                        <input type="text" id="search-input" placeholder="Cari musik...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+                <div class="music-popup-list-content">
+                    <div class="playlist-grid" id="playlist-grid">
+                        <div class="playlist-item" data-playlist="genshin">
+                            <div class="playlist-cover">
+                                <img src="https://files.catbox.moe/63hdh0.png" alt="Genshin Impact">
+                            </div>
+                            <div class="playlist-name">Genshin Impact</div>
+                            <div class="playlist-count">5 Lagu</div>
+                        </div>
+                        <div class="playlist-item" data-playlist="honkai-sr">
+                            <div class="playlist-cover">
+                                <img src="https://via.placeholder.com/100" alt="Honkai: Star Rail">
+                            </div>
+                            <div class="playlist-name">Honkai: Star Rail</div>
+                            <div class="playlist-count">0 Lagu</div>
+                        </div>
+                        <div class="playlist-item" data-playlist="honkai-impact">
+                            <div class="playlist-cover">
+                                <img src="https://via.placeholder.com/100" alt="Honkai Impact 3">
+                            </div>
+                            <div class="playlist-name">Honkai Impact 3</div>
+                            <div class="playlist-count">0 Lagu</div>
+                        </div>
+                    </div>
+                    <div id="music-popup-list-items" style="display: none;"></div>
+                </div>
             </div>
             <div class="music-popup-lyrics" id="music-popup-lyrics">
                 <button class="lyrics-close-btn" id="lyrics-close-btn">
@@ -2669,6 +2864,26 @@
                                     <label for="auto-switch-toggle" class="toggle-label"></label>
                                 </div>
                             </div>
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title" id="bypass-playlist-title">Bypass Playlist</div>
+                                    <div class="settings-item-desc" id="bypass-playlist-desc">Lewati playlist saat lagu habis</div>
+                                </div>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="bypass-playlist-toggle" class="toggle-checkbox">
+                                    <label for="bypass-playlist-toggle" class="toggle-label"></label>
+                                </div>
+                            </div>
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title" id="random-auto-next-title">Random Auto Next</div>
+                                    <div class="settings-item-desc" id="random-auto-next-desc">Acak lagu berikutnya dalam playlist</div>
+                                </div>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="random-auto-next-toggle" class="toggle-checkbox">
+                                    <label for="random-auto-next-toggle" class="toggle-label"></label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2711,16 +2926,21 @@
     <div class="toast-container" id="toast-container"></div>
 
     <script>
-        const mediaConfig = {
-            profilePicture: 'https://files.catbox.moe/bwq7hy.jpg',
-            musicList: [
-                {
-                    title: 'Emberfire - HOYO-MiX, 希林娜依高',
-                    artist: 'HOYO-MiX, 希林娜依高',
-                    coverUrl: 'https://files.catbox.moe/63hdh0.png',
-                    audioUrl: 'https://files.catbox.moe/4dae0p.mp3',
-                    duration: '2:50',
-                    lyrics: `May the birds soar from their cage
+        const playlists = {
+            genshin: {
+                name: {
+                    id: 'Genshin Impact',
+                    en: 'Genshin Impact'
+                },
+                coverUrl: 'https://files.catbox.moe/63hdh0.png',
+                musicList: [
+                    {
+                        title: 'Emberfire - HOYO-MiX, 希林娜依高',
+                        artist: 'HOYO-MiX, 希林娜依高',
+                        coverUrl: 'https://files.catbox.moe/63hdh0.png',
+                        audioUrl: 'https://files.catbox.moe/4dae0p.mp3',
+                        duration: '2:50',
+                        lyrics: `May the birds soar from their cage
 Sunbeams filter through the foliage
 Flames grow with immortal courage
 And I hope you won't be tainted by fate
@@ -2754,14 +2974,14 @@ And your world will never fall away
 Nothing to fear
 Beneath the scars
 You'll never be tainted by fate`
-                },
-                {
-                    title: 'The Road Not Taken - HOYO-MiX, Aimer',
-                    artist: 'HOYO-MiX, Aimer',
-                    coverUrl: 'https://files.catbox.moe/tpjrev.png',
-                    audioUrl: 'https://files.catbox.moe/ags8go.mp3',
-                    duration: '3:24',
-                    lyrics: `Traveling in the nights you've left me in
+                    },
+                    {
+                        title: 'The Road Not Taken - HOYO-MiX, Aimer',
+                        artist: 'HOYO-MiX, Aimer',
+                        coverUrl: 'https://files.catbox.moe/tpjrev.png',
+                        audioUrl: 'https://files.catbox.moe/ags8go.mp3',
+                        duration: '3:24',
+                        lyrics: `Traveling in the nights you've left me in
 I feel you in the last blow of wind
 Even nowhere I can find you out
 The answer is not far off now
@@ -2790,14 +3010,14 @@ Have you taken off, are you already on your way?
 No matter where you are, I've come with you this far
 I'm never really lost
 Our paths will surely cross`
-                },
-                {
-                    title: 'Star Odyssey - HOYO-Mix, 鈴木愛理',
-                    artist: 'HOYO-Mix, 鈴木愛理',
-                    coverUrl: 'https://files.catbox.moe/5mb46q.png',
-                    audioUrl: 'https://files.catbox.moe/xju3ka.mp3',
-                    duration: '3:13',
-                    lyrics: `[Verse 1]
+                    },
+                    {
+                        title: 'Star Odyssey - HOYO-Mix, 鈴木愛理',
+                        artist: 'HOYO-Mix, 鈴木愛理',
+                        coverUrl: 'https://files.catbox.moe/5mb46q.png',
+                        audioUrl: 'https://files.catbox.moe/xju3ka.mp3',
+                        duration: '3:13',
+                        lyrics: `[Verse 1]
 If your long journey makes you drift too far away
 And if the dust and time still weigh you down, pulling you astray
 If passing years change you somehow
@@ -2821,14 +3041,14 @@ I wait
 I wait
 Know I wait
 Wait for you`
-                },
-                {
-                    title: 'Columbina Lullaby - HOYO-MiX',
-                    artist: 'HOYO-MiX',
-                    coverUrl: 'https://files.catbox.moe/vd0k0p.png',
-                    audioUrl: 'https://files.catbox.moe/vs8bpd.mp3',
-                    duration: '2:10',
-                    lyrics: `Dormi, cara Columbula
+                    },
+                    {
+                        title: 'Columbina Lullaby - HOYO-MiX',
+                        artist: 'HOYO-MiX',
+                        coverUrl: 'https://files.catbox.moe/vd0k0p.png',
+                        audioUrl: 'https://files.catbox.moe/vs8bpd.mp3',
+                        duration: '2:10',
+                        lyrics: `Dormi, cara Columbula
 O Columbula mea
 Senti ad fenestram
 Adsint somnians flora
@@ -2849,14 +3069,14 @@ Ne verum ambulo
 Vivo te tam Nec ea cum est sua amans
 Tam pia, bona Somnians a luna Tam pia
 Bona Somnians a luna`
-                },
-                {
-                    title: 'The Long Way Home (English Version) · HOYO-MiX',
-                    artist: 'HOYO-MiX',
-                    coverUrl: 'https://files.catbox.moe/xldtrr.png',
-                    audioUrl: 'https://files.catbox.moe/qhzm4g.mp3',
-                    duration: '2:52',
-                    lyrics: `[Verse: Erika Harlacher]
+                    },
+                    {
+                        title: 'The Long Way Home (English Version) · HOYO-MiX',
+                        artist: 'HOYO-MiX',
+                        coverUrl: 'https://files.catbox.moe/xldtrr.png',
+                        audioUrl: 'https://files.catbox.moe/qhzm4g.mp3',
+                        duration: '2:52',
+                        lyrics: `[Verse: Erika Harlacher]
 See the stars above you shining
 Guiding you along
 Hear the music in the forest
@@ -2903,8 +3123,33 @@ And make us all feel so alive
 You know, when the time has come to journey home
 That every star and every cloud
 Is smiling down on you, Traveler`
-                }
-            ]
+                    }
+                ]
+            },
+            'honkai-sr': {
+                name: {
+                    id: 'Honkai: Star Rail',
+                    en: 'Honkai: Star Rail'
+                },
+                coverUrl: 'https://via.placeholder.com/100',
+                musicList: []
+            },
+            'honkai-impact': {
+                name: {
+                    id: 'Honkai Impact 3',
+                    en: 'Honkai Impact 3'
+                },
+                coverUrl: 'https://via.placeholder.com/100',
+                musicList: []
+            },
+            'zenless-zone-zero': {
+                name: {
+                    id: 'Zenless Zone Zero',
+                    en: 'Zenless Zone Zero'
+                },
+                coverUrl: 'https://via.placeholder.com/100',
+                musicList: []
+            }
         };
 
         const contactData = {
@@ -3012,10 +3257,15 @@ Is smiling down on you, Traveler`
                 amoledDesc: "Mode gelap untuk layar AMOLED",
                 autoSwitchTitle: "Auto Switch Song",
                 autoSwitchDesc: "Otomatis ganti lagu saat selesai",
+                bypassPlaylistTitle: "Bypass Playlist",
+                bypassPlaylistDesc: "Lewati playlist saat lagu habis",
+                randomAutoNextTitle: "Random Auto Next",
+                randomAutoNextDesc: "Acak lagu berikutnya dalam playlist",
                 comingSoon: "Coming Soon",
                 downloadMusic: "Download Musik",
                 lyrics: "Lirik",
-                backToPlaylist: "Kembali ke Playlist"
+                backToPlaylist: "Kembali ke Playlist",
+                searchMusic: "Cari musik..."
             },
             en: {
                 name: "Chioriya Developer",
@@ -3064,10 +3314,15 @@ Is smiling down on you, Traveler`
                 amoledDesc: "Dark mode for AMOLED screens",
                 autoSwitchTitle: "Auto Switch Song",
                 autoSwitchDesc: "Automatically switch songs when finished",
+                bypassPlaylistTitle: "Bypass Playlist",
+                bypassPlaylistDesc: "Skip playlist when song ends",
+                randomAutoNextTitle: "Random Auto Next",
+                randomAutoNextDesc: "Randomize next song in playlist",
                 comingSoon: "Coming Soon",
                 downloadMusic: "Download Music",
                 lyrics: "Lyrics",
-                backToPlaylist: "Back to Playlist"
+                backToPlaylist: "Back to Playlist",
+                searchMusic: "Search music..."
             }
         };
 
@@ -3128,6 +3383,10 @@ Is smiling down on you, Traveler`
         const musicPopupForward = document.getElementById('music-popup-forward');
         const musicPopupNext = document.getElementById('music-popup-next');
         const musicPopupListItems = document.getElementById('music-popup-list-items');
+        const playlistGrid = document.getElementById('playlist-grid');
+        const playlistBackBtn = document.getElementById('playlist-back-btn');
+        const playlistSearch = document.getElementById('playlist-search');
+        const searchInput = document.getElementById('search-input');
         const logo = document.getElementById('logo');
         const settingsPopup = document.getElementById('settings-popup');
         const settingsPopupClose = document.getElementById('settings-popup-close');
@@ -3140,9 +3399,15 @@ Is smiling down on you, Traveler`
         const amoledDesc = document.getElementById('amoled-desc');
         const autoSwitchTitle = document.getElementById('auto-switch-title');
         const autoSwitchDesc = document.getElementById('auto-switch-desc');
+        const bypassPlaylistTitle = document.getElementById('bypass-playlist-title');
+        const bypassPlaylistDesc = document.getElementById('bypass-playlist-desc');
+        const randomAutoNextTitle = document.getElementById('random-auto-next-title');
+        const randomAutoNextDesc = document.getElementById('random-auto-next-desc');
         const toastToggle = document.getElementById('toast-toggle');
         const amoledToggle = document.getElementById('amoled-toggle');
         const autoSwitchToggle = document.getElementById('auto-switch-toggle');
+        const bypassPlaylistToggle = document.getElementById('bypass-playlist-toggle');
+        const randomAutoNextToggle = document.getElementById('random-auto-next-toggle');
         const gameItems = document.querySelectorAll('.game-name');
         const musicPopupOptionsBtn = document.getElementById('music-popup-options-btn');
         const musicPopupOptionsMenu = document.getElementById('music-popup-options-menu');
@@ -3157,6 +3422,7 @@ Is smiling down on you, Traveler`
         let isThemeToggleActive = false;
         let isLanguageToggleActive = false;
         let isMusicPlaying = false;
+        let currentPlaylist = 'genshin';
         let currentMusicIndex = 0;
         let audioElement = null;
         let currentContactType = '';
@@ -3176,12 +3442,24 @@ Is smiling down on you, Traveler`
         let enableToast = true;
         let enableAmoledDark = false;
         let enableAutoSwitch = true;
+        let enableBypassPlaylist = false;
+        let enableRandomAutoNext = false;
         let isShowingLyrics = false;
+        let isInPlaylistView = false;
+        let filteredMusicList = [];
+        let playedSongs = [];
+        let playlistOrder = Object.keys(playlists);
 
         function initializeWelcomeScreen() {
             loadingProgress = 0;
             loadedResources = 0;
-            totalResources = mediaConfig.musicList.length + 2;
+            
+            let resourceCount = 0;
+            Object.keys(playlists).forEach(playlistId => {
+                const playlist = playlists[playlistId];
+                resourceCount += playlist.musicList.length + 1;
+            });
+            totalResources = resourceCount + 1;
             
             loadingInterval = setInterval(() => {
                 if (!resourcesLoaded && loadingProgress < 90) {
@@ -3203,20 +3481,29 @@ Is smiling down on you, Traveler`
         function loadResources() {
             const profileImage = new Image();
             profileImage.onload = () => {
-                profilePicture.src = mediaConfig.profilePicture;
+                profilePicture.src = 'https://files.catbox.moe/bwq7hy.jpg';
                 resourceLoaded("Foto Profil");
             };
             profileImage.onerror = () => {
                 profilePicture.src = '';
                 resourceLoaded("Foto Profil");
             };
-            profileImage.src = mediaConfig.profilePicture;
+            profileImage.src = 'https://files.catbox.moe/bwq7hy.jpg';
             
-            mediaConfig.musicList.forEach((music, index) => {
+            Object.keys(playlists).forEach(playlistId => {
+                const playlist = playlists[playlistId];
+                
                 const coverImage = new Image();
-                coverImage.onload = () => resourceLoaded(`Cover Musik ${index + 1}`);
-                coverImage.onerror = () => resourceLoaded(`Cover Musik ${index + 1}`);
-                coverImage.src = music.coverUrl;
+                coverImage.onload = () => resourceLoaded(`Cover Playlist ${playlist.name[currentLanguage]}`);
+                coverImage.onerror = () => resourceLoaded(`Cover Playlist ${playlist.name[currentLanguage]}`);
+                coverImage.src = playlist.coverUrl;
+                
+                playlist.musicList.forEach((music, index) => {
+                    const musicCoverImage = new Image();
+                    musicCoverImage.onload = () => resourceLoaded(`Cover Musik ${playlist.name[currentLanguage]} - ${music.title}`);
+                    musicCoverImage.onerror = () => resourceLoaded(`Cover Musik ${playlist.name[currentLanguage]} - ${music.title}`);
+                    musicCoverImage.src = music.coverUrl;
+                });
             });
             
             audioElement = new Audio();
@@ -3226,7 +3513,7 @@ Is smiling down on you, Traveler`
             audioElement.addEventListener('timeupdate', updateProgress);
             audioElement.addEventListener('loadedmetadata', updateTotalTime);
             
-            const currentMusic = mediaConfig.musicList[0];
+            const currentMusic = playlists[currentPlaylist].musicList[0];
             musicTitle.textContent = currentMusic.title;
             musicArtist.textContent = currentMusic.artist;
             musicCoverImg.src = currentMusic.coverUrl;
@@ -3248,11 +3535,32 @@ Is smiling down on you, Traveler`
         
         function handleTrackEnd() {
             if (enableAutoSwitch) {
-                changeMusic('next');
+                if (enableRandomAutoNext) {
+                    playRandomSongInPlaylist();
+                } else {
+                    changeMusic('next');
+                }
             } else {
                 audioElement.currentTime = 0;
                 audioElement.play();
             }
+        }
+        
+        function playRandomSongInPlaylist() {
+            const currentPlaylistObj = playlists[currentPlaylist];
+            const availableSongs = currentPlaylistObj.musicList
+                .map((_, index) => index)
+                .filter(index => !playedSongs.includes(index));
+            
+            if (availableSongs.length === 0) {
+                playedSongs = [];
+                playRandomSongInPlaylist();
+                return;
+            }
+            
+            const randomIndex = availableSongs[Math.floor(Math.random() * availableSongs.length)];
+            playedSongs.push(randomIndex);
+            playMusicByIndex(randomIndex);
         }
         
         function resourceLoaded(resourceName) {
@@ -3392,7 +3700,7 @@ Is smiling down on you, Traveler`
         function toggleMusicPopup() {
             musicPopup.classList.toggle('active');
             if (musicPopup.classList.contains('active')) {
-                updateMusicList();
+                updatePlaylistView();
                 startProgressUpdate();
                 if (isShowingLyrics) {
                     showLyrics();
@@ -3471,13 +3779,21 @@ Is smiling down on you, Traveler`
                     audioElement.pause();
                 }
                 
+                const currentPlaylistObj = playlists[currentPlaylist];
                 if (direction === 'next') {
-                    currentMusicIndex = (currentMusicIndex + 1) % mediaConfig.musicList.length;
+                    currentMusicIndex = (currentMusicIndex + 1) % currentPlaylistObj.musicList.length;
+                    
+                    if (currentMusicIndex === 0 && enableBypassPlaylist) {
+                        const currentPlaylistIndex = playlistOrder.indexOf(currentPlaylist);
+                        const nextPlaylistIndex = (currentPlaylistIndex + 1) % playlistOrder.length;
+                        currentPlaylist = playlistOrder[nextPlaylistIndex];
+                        currentMusicIndex = 0;
+                    }
                 } else {
-                    currentMusicIndex = (currentMusicIndex - 1 + mediaConfig.musicList.length) % mediaConfig.musicList.length;
+                    currentMusicIndex = (currentMusicIndex - 1 + currentPlaylistObj.musicList.length) % currentPlaylistObj.musicList.length;
                 }
                 
-                const currentMusic = mediaConfig.musicList[currentMusicIndex];
+                const currentMusic = playlists[currentPlaylist].musicList[currentMusicIndex];
                 musicTitle.textContent = currentMusic.title;
                 musicArtist.textContent = currentMusic.artist;
                 musicCoverImg.src = currentMusic.coverUrl;
@@ -3503,6 +3819,7 @@ Is smiling down on you, Traveler`
                 
                 updateMediaSessionMetadata();
                 updateMusicList();
+                updatePlaylistHighlight();
                 
                 if (isShowingLyrics) {
                     updateLyrics();
@@ -3538,7 +3855,7 @@ Is smiling down on you, Traveler`
                 
                 currentMusicIndex = index;
                 
-                const currentMusic = mediaConfig.musicList[currentMusicIndex];
+                const currentMusic = playlists[currentPlaylist].musicList[currentMusicIndex];
                 musicTitle.textContent = currentMusic.title;
                 musicArtist.textContent = currentMusic.artist;
                 musicCoverImg.src = currentMusic.coverUrl;
@@ -3564,6 +3881,7 @@ Is smiling down on you, Traveler`
                 
                 updateMediaSessionMetadata();
                 updateMusicList();
+                updatePlaylistHighlight();
                 
                 if (isShowingLyrics) {
                     updateLyrics();
@@ -3584,8 +3902,27 @@ Is smiling down on you, Traveler`
         function playRandomMusic() {
             if (!audioElement) return;
             
-            currentMusicIndex = Math.floor(Math.random() * mediaConfig.musicList.length);
-            const currentMusic = mediaConfig.musicList[currentMusicIndex];
+            const allMusic = [];
+            Object.keys(playlists).forEach(playlistId => {
+                const playlist = playlists[playlistId];
+                if (playlist.musicList.length > 0) {
+                    playlist.musicList.forEach((music, index) => {
+                        allMusic.push({
+                            playlistId: playlistId,
+                            index: index,
+                            music: music
+                        });
+                    });
+                }
+            });
+            
+            if (allMusic.length === 0) return;
+            
+            const randomMusic = allMusic[Math.floor(Math.random() * allMusic.length)];
+            currentPlaylist = randomMusic.playlistId;
+            currentMusicIndex = randomMusic.index;
+            const currentMusic = randomMusic.music;
+            
             musicTitle.textContent = currentMusic.title;
             musicArtist.textContent = currentMusic.artist;
             musicCoverImg.src = currentMusic.coverUrl;
@@ -3599,6 +3936,7 @@ Is smiling down on you, Traveler`
             
             updateMediaSessionMetadata();
             updateMusicList();
+            updatePlaylistHighlight();
             
             const playPromise = audioElement.play();
             if (playPromise !== undefined) {
@@ -3625,7 +3963,7 @@ Is smiling down on you, Traveler`
         
         function updateMediaSessionMetadata() {
             if ('mediaSession' in navigator) {
-                const currentMusic = mediaConfig.musicList[currentMusicIndex];
+                const currentMusic = playlists[currentPlaylist].musicList[currentMusicIndex];
                 navigator.mediaSession.metadata = new MediaMetadata({
                     title: currentMusic.title,
                     artist: currentMusic.artist,
@@ -3732,12 +4070,76 @@ Is smiling down on you, Traveler`
             }
         }
         
+        function updatePlaylistView() {
+            playlistGrid.innerHTML = '';
+            
+            Object.keys(playlists).forEach(playlistId => {
+                const playlist = playlists[playlistId];
+                const item = document.createElement('div');
+                item.className = `playlist-item ${playlistId === currentPlaylist ? 'active' : ''}`;
+                item.setAttribute('data-playlist', playlistId);
+                item.innerHTML = `
+                    <div class="playlist-cover">
+                        <img src="${playlist.coverUrl}" alt="${playlist.name[currentLanguage]}">
+                    </div>
+                    <div class="playlist-name">${playlist.name[currentLanguage]}</div>
+                    <div class="playlist-count">${playlist.musicList.length} ${currentLanguage === 'id' ? 'Lagu' : 'Songs'}</div>
+                `;
+                
+                item.addEventListener('click', () => openPlaylist(playlistId));
+                playlistGrid.appendChild(item);
+            });
+        }
+        
+        function updatePlaylistHighlight() {
+            document.querySelectorAll('.playlist-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('data-playlist') === currentPlaylist) {
+                    item.classList.add('active');
+                }
+            });
+        }
+        
+        function openPlaylist(playlistId) {
+            currentPlaylist = playlistId;
+            isInPlaylistView = true;
+            filteredMusicList = [...playlists[playlistId].musicList];
+            
+            playlistBackBtn.style.display = 'flex';
+            playlistSearch.style.display = 'block';
+            playlistGrid.style.display = 'none';
+            musicPopupListItems.style.display = 'block';
+            musicPopupListTitle.textContent = playlists[playlistId].name[currentLanguage];
+            
+            updateMusicList();
+            updatePlaylistHighlight();
+        }
+        
+        function closePlaylist() {
+            isInPlaylistView = false;
+            
+            playlistBackBtn.style.display = 'none';
+            playlistSearch.style.display = 'none';
+            playlistGrid.style.display = 'grid';
+            musicPopupListItems.style.display = 'none';
+            musicPopupListTitle.textContent = content[currentLanguage].musicPlaylist;
+            
+            searchInput.value = '';
+            filteredMusicList = [];
+            updatePlaylistHighlight();
+        }
+        
         function updateMusicList() {
+            if (!isInPlaylistView) return;
+            
             musicPopupListItems.innerHTML = '';
             
-            mediaConfig.musicList.forEach((music, index) => {
+            const musicList = filteredMusicList.length > 0 ? filteredMusicList : playlists[currentPlaylist].musicList;
+            
+            musicList.forEach((music, index) => {
+                const originalIndex = playlists[currentPlaylist].musicList.findIndex(m => m.title === music.title);
                 const item = document.createElement('div');
-                item.className = `music-popup-item ${index === currentMusicIndex ? 'active' : ''}`;
+                item.className = `music-popup-item ${originalIndex === currentMusicIndex ? 'active' : ''}`;
                 item.innerHTML = `
                     <div class="music-popup-item-cover">
                         <img src="${music.coverUrl}" alt="${music.title}">
@@ -3749,9 +4151,22 @@ Is smiling down on you, Traveler`
                     <div class="music-popup-item-duration">${music.duration}</div>
                 `;
                 
-                item.addEventListener('click', () => playMusicByIndex(index));
+                item.addEventListener('click', () => playMusicByIndex(originalIndex));
                 musicPopupListItems.appendChild(item);
             });
+        }
+        
+        function searchMusic() {
+            const searchTerm = searchInput.value.toLowerCase();
+            if (searchTerm === '') {
+                filteredMusicList = [...playlists[currentPlaylist].musicList];
+            } else {
+                filteredMusicList = playlists[currentPlaylist].musicList.filter(music => 
+                    music.title.toLowerCase().includes(searchTerm) || 
+                    music.artist.toLowerCase().includes(searchTerm)
+                );
+            }
+            updateMusicList();
         }
         
         function showToast(message, type = 'default', duration = 3000) {
@@ -3810,7 +4225,7 @@ Is smiling down on you, Traveler`
         }
         
         function showMusicNotification(action) {
-            const currentMusic = mediaConfig.musicList[currentMusicIndex];
+            const currentMusic = playlists[currentPlaylist].musicList[currentMusicIndex];
             let message = '';
             
             if (window.innerWidth <= 768) {
@@ -3917,14 +4332,36 @@ Is smiling down on you, Traveler`
             document.getElementById('amoled-desc').textContent = langData.amoledDesc;
             document.getElementById('auto-switch-title').textContent = langData.autoSwitchTitle;
             document.getElementById('auto-switch-desc').textContent = langData.autoSwitchDesc;
+            document.getElementById('bypass-playlist-title').textContent = langData.bypassPlaylistTitle;
+            document.getElementById('bypass-playlist-desc').textContent = langData.bypassPlaylistDesc;
+            document.getElementById('random-auto-next-title').textContent = langData.randomAutoNextTitle;
+            document.getElementById('random-auto-next-desc').textContent = langData.randomAutoNextDesc;
             
             document.getElementById('download-music-option').textContent = langData.downloadMusic;
             document.getElementById('lyrics-option').textContent = langData.lyrics;
             document.getElementById('lyrics-close-text').textContent = langData.backToPlaylist;
+            document.getElementById('search-input').placeholder = langData.searchMusic;
             
             gameItems.forEach(item => {
                 item.textContent = langData.comingSoon;
             });
+            
+            Object.keys(playlists).forEach(playlistId => {
+                const playlist = playlists[playlistId];
+                const playlistItems = document.querySelectorAll(`.playlist-item[data-playlist="${playlistId}"] .playlist-name`);
+                playlistItems.forEach(item => {
+                    item.textContent = playlist.name[currentLanguage];
+                });
+                
+                const playlistCounts = document.querySelectorAll(`.playlist-item[data-playlist="${playlistId}"] .playlist-count`);
+                playlistCounts.forEach(item => {
+                    item.textContent = `${playlist.musicList.length} ${currentLanguage === 'id' ? 'Lagu' : 'Songs'}`;
+                });
+            });
+            
+            if (isInPlaylistView) {
+                musicPopupListTitle.textContent = playlists[currentPlaylist].name[currentLanguage];
+            }
             
             if (currentLanguage === 'id') {
                 clickInstruction.textContent = "Klik di mana saja untuk melanjutkan";
@@ -4083,6 +4520,15 @@ Is smiling down on you, Traveler`
                     enableAutoSwitch = isEnabled;
                     showSettingsNotification('Auto Switch Song', isEnabled);
                     break;
+                case 'bypass-playlist-toggle':
+                    enableBypassPlaylist = isEnabled;
+                    showSettingsNotification('Bypass Playlist', isEnabled);
+                    break;
+                case 'random-auto-next-toggle':
+                    enableRandomAutoNext = isEnabled;
+                    playedSongs = []; // Reset played songs when toggling
+                    showSettingsNotification('Random Auto Next', isEnabled);
+                    break;
             }
         }
         
@@ -4097,7 +4543,7 @@ Is smiling down on you, Traveler`
         }
         
         function downloadMusic() {
-            const currentMusic = mediaConfig.musicList[currentMusicIndex];
+            const currentMusic = playlists[currentPlaylist].musicList[currentMusicIndex];
             const a = document.createElement('a');
             a.href = currentMusic.audioUrl;
             a.download = currentMusic.title + '.mp3';
@@ -4117,12 +4563,12 @@ Is smiling down on you, Traveler`
         
         function hideLyrics() {
             musicPopupLyrics.style.display = 'none';
-            document.querySelector('.music-popup-list').style.display = 'block';
+            document.querySelector('.music-popup-list').style.display = 'flex';
             isShowingLyrics = false;
         }
         
         function updateLyrics() {
-            const currentMusic = mediaConfig.musicList[currentMusicIndex];
+            const currentMusic = playlists[currentPlaylist].musicList[currentMusicIndex];
             lyricsContent.textContent = currentMusic.lyrics;
             lyricsContent.classList.remove('active');
             setTimeout(() => {
@@ -4249,6 +4695,8 @@ Is smiling down on you, Traveler`
             toastToggle.addEventListener('change', handleToggleSwitchChange);
             amoledToggle.addEventListener('change', handleToggleSwitchChange);
             autoSwitchToggle.addEventListener('change', handleToggleSwitchChange);
+            bypassPlaylistToggle.addEventListener('change', handleToggleSwitchChange);
+            randomAutoNextToggle.addEventListener('change', handleToggleSwitchChange);
             
             musicPopupOptionsBtn.addEventListener('click', toggleMusicOptionsMenu);
             document.addEventListener('click', closeMusicOptionsMenu);
@@ -4256,6 +4704,16 @@ Is smiling down on you, Traveler`
             downloadMusicOption.addEventListener('click', downloadMusic);
             lyricsOption.addEventListener('click', showLyrics);
             lyricsCloseBtn.addEventListener('click', hideLyrics);
+            
+            playlistBackBtn.addEventListener('click', closePlaylist);
+            searchInput.addEventListener('input', searchMusic);
+            
+            document.querySelectorAll('.playlist-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const playlistId = item.getAttribute('data-playlist');
+                    openPlaylist(playlistId);
+                });
+            });
         }
         
         function init() {
